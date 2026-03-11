@@ -1,32 +1,90 @@
-# Contribution Ledger Freeze Note — 2026-03-08
+# Contribution Ledger — Project Status
 
-Contribution Ledger reached a frozen Tier-0 standalone green state on 2026-03-08.
+## Project Role
 
-## What Was Proven
-- full green runner executes successfully
-- positive vector verifies successfully
-- negative vectors fail with deterministic expected primary tokens
-- append-only receipt output exists
-- freeze/evidence bundle emitted successfully
+Contribution Ledger is a deterministic accounting instrument that converts verified receipts into canonical contribution ledger entries and contribution credit.
 
-## Canonical Tokens
-Full green token:
+It acts as the accounting backbone for contribution and incentive systems built on verified events.
 
-`FULL_GREEN_OK: CONTRIBUTION_LEDGER_V1`
+---
 
-Freeze token:
+## Current State
 
-`CONTRIBUTION_LEDGER_TIER0_FREEZE_OK`
+The standalone accounting surface is operational and reproducible.
 
-## Freeze Directory
-`proofs/freeze/contribution_ledger_tier0_green_20260308/`
+The repository includes:
 
-## Freeze Meaning
-This freeze seals the current standalone proof surface of Contribution Ledger v1.
+- deterministic build surface
+- deterministic verification surface
+- positive proof vectors
+- negative proof vectors
+- append-only receipt emission
+- reproducible freeze bundle
 
-It means the instrument can stand as the current Tier-0 nucleus of the Economic / Incentive Layer without additional work unless scope is expanded or a later version is introduced.
+---
 
-## Important Scope Note
-This freeze does not claim that the entire future economic system is complete.
+## Proof Surface
 
-It claims that the current standalone instrument surface is complete and proven.
+The current proof surface validates:
+
+- minimal valid ledger flow
+- duplicate event reference detection
+- ruleset hash mismatch detection
+- credit mismatch detection
+
+---
+
+## Freeze Evidence
+
+Freeze bundle location:
+
+
+proofs/freeze/contribution_ledger_tier0_green_20260308
+
+
+Contents:
+
+
+full_green_transcript.txt
+sha256sums.txt
+freeze_receipt.json
+
+
+---
+
+## Deterministic Guarantees
+
+The system ensures:
+
+- deterministic ledger construction
+- deterministic verification
+- prevention of double counting
+- prevention of ruleset drift
+- append-only ledger discipline
+
+---
+
+## Intended Integrations
+
+Contribution Ledger can ingest receipts from systems that produce verifiable events.
+
+Typical examples include:
+
+- infrastructure telemetry verification
+- artifact verification
+- deterministic job execution receipts
+
+The ledger converts those verified events into deterministic accounting records.
+
+---
+
+## Future Work
+
+Future improvements may include:
+
+- additional contribution classes
+- ruleset expansion
+- additional verification invariants
+- improved reporting surfaces
+
+The core accounting surface is designed to remain stable.
