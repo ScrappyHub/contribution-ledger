@@ -1,0 +1,52 @@
+param(
+  [Parameter(Mandatory=$true)][string]$RepoRoot,
+  [Parameter(Mandatory=$false)][string]$TvRoot
+)
+$ErrorActionPreference="Stop"
+Set-StrictMode -Version Latest
+. (Join-Path $RepoRoot "scripts\_lib_contribution_ledger_v1.ps1")
+function Die([string]$m){ throw $m }
+
+if([string]::IsNullOrWhiteSpace($TvRoot)){
+  $TvRoot = Join-Path $RepoRoot "test_vectors\minimal_valid"
+}
+
+$InDir = Join-Path $TvRoot "inputs"
+$Ledger = Join-Path $TvRoot "ledger.ndjson"
+$Rules = Join-Path $InDir "ruleset.json"
+
+if(-not (Test-Path -LiteralPath $Ledger -PathType Leaf)){ Die ("MISSING_LEDGER: " + $Ledger) }
+if(-not (Test-Path -LiteralPath $Rules -PathType Leaf)){ Die ("MISSING_RULESET: " + $Rules) }
+
+$rulesObj = Get-Content -LiteralPath $Rules -Raw -Encoding UTF8 | ConvertFrom-Json -ErrorAction Stop
+$ruleHash = CL-Sha256HexFile $Rules
+$weights = @{}
+foreach($r in @($rulesObj.rules)){ $weights[[string]$r.event_type] = [int]$r.weight }
+
+$seen=@{}
+$fail = New-Object System.Collections.Generic.List[string]
+$rows = CL-ReadLinesUtf8 $Ledger
+
+foreach($ln in @($rows)){
+  $o = $ln | ConvertFrom-Json -ErrorAction Stop
+  $er = [string]$o.event_ref
+  if($seen.ContainsKey($er)){ [void]$fail.Add("DUP_EVENT_REF"); continue }
+  $seen[$er]=$true
+
+  if([string]$o.ruleset_hash -ne $ruleHash){ [void]$fail.Add("RULESET_HASH_MISMATCH") }
+
+  $etype=[string]$o.event_type; $units=[int]$o.units; $w=[int]$o.weight; $credit=[int]$o.credit
+  if(-not $weights.ContainsKey($etype)){ [void]$fail.Add("UNKNOWN_EVENT_TYPE"); continue }
+  if($w -ne [int]$weights[$etype]){ [void]$fail.Add("WEIGHT_MISMATCH") }
+  if($credit -ne ($units * $w)){ [void]$fail.Add("CREDIT_MISMATCH") }
+
+  $expEr = CL-EventRef ([string]$o.receipt_hash) $ruleHash $etype $units
+  if($er -ne $expEr){ [void]$fail.Add("EVENT_REF_MISMATCH") }
+}
+
+$ok = (@($fail.ToArray()).Count -eq 0)
+$res = @{ schema="contrib.verify.result.v1"; ok=$ok; failures=@($fail.ToArray()); ruleset_hash=$ruleHash; ledger=$Ledger }
+[System.IO.File]::WriteAllBytes((Join-Path $TvRoot "verify_result.json"),(CL-CanonJsonBytes $res))
+
+if($ok){ Write-Host ("VERIFY_OK: " + $TvRoot) -ForegroundColor Green }
+else { Write-Host ("VERIFY_FAIL: " + (@($fail.ToArray()) -join "|")) -ForegroundColor Red; exit 2 }

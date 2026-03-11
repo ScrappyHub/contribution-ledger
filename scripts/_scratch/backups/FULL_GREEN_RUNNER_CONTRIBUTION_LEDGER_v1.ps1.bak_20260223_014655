@@ -1,0 +1,29 @@
+param([Parameter(Mandatory=$true)][string]$RepoRoot)
+$ErrorActionPreference="Stop"
+Set-StrictMode -Version Latest
+
+function Die([string]$m){ throw $m }
+function ParseGate([string]$Path){
+  $t=$null; $e=$null
+  [void][System.Management.Automation.Language.Parser]::ParseFile($Path,[ref]$t,[ref]$e)
+  if($e -and @($e).Count -gt 0){
+    $x=$e[0]
+    Die ("PARSE_GATE_FAIL: {0}:{1}:{2}: {3}" -f $Path,$x.Extent.StartLineNumber,$x.Extent.StartColumnNumber,$x.Message)
+  }
+}
+
+$Scripts = Join-Path $RepoRoot "scripts"
+$Lib = Join-Path $Scripts "_lib_contribution_ledger_v1.ps1"
+$Build = Join-Path $Scripts "build_contribution_ledger_v1.ps1"
+$Verify = Join-Path $Scripts "verify_contribution_ledger_v1.ps1"
+$Self = Join-Path $Scripts "_SELFTEST_contribution_ledger_v1.ps1"
+
+ParseGate $Lib
+ParseGate $Build
+ParseGate $Verify
+ParseGate $Self
+Write-Host "PARSE_OK: all scripts" -ForegroundColor Green
+
+& (Join-Path $env:WINDIR "System32\WindowsPowerShell\v1.0\powershell.exe") -NoProfile -NonInteractive -ExecutionPolicy Bypass -File $Self -RepoRoot $RepoRoot | Out-Host
+
+Write-Host "FULL_GREEN_OK: CONTRIBUTION_LEDGER_TIER0" -ForegroundColor Green

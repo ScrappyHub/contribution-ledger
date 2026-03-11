@@ -1,0 +1,1 @@
+{ "schema":"ruleset.v1","ruleset_id":"tampered","rules":[{"event_type":"watchtower.verify","weight":999},{"event_type":"device.uptime","weight":1}] }

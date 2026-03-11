@@ -1,0 +1,12 @@
+PARSE_OK: all scripts
+BUILD_OK: added=0 tv=C:\dev\contribution-ledger\test_vectors\minimal_valid
+VERIFY_OK: C:\dev\contribution-ledger\test_vectors\minimal_valid
+POS_OK
+VERIFY_FAIL: C:\dev\contribution-ledger\test_vectors\neg_dup_event_ref :: DUP_EVENT_REF
+NEG1_OK (DUP_EVENT_REF)
+VERIFY_FAIL: C:\dev\contribution-ledger\test_vectors\neg_ruleset_hash_mismatch :: RULESET_HASH_MISMATCH|LEDGER_EVENT_REF_NOT_IN_RECEIPTS|RULESET_HASH_MISMATCH|LEDGER_EVENT_REF_NOT_IN_RECEIPTS
+NEG2_OK (RULESET_HASH_MISMATCH)
+VERIFY_FAIL: C:\dev\contribution-ledger\test_vectors\neg_credit_mismatch :: CREDIT_MISMATCH
+NEG3_OK (CREDIT_MISMATCH)
+SELFTEST_CONTRIBUTION_LEDGER_OK
+FULL_GREEN_OK: CONTRIBUTION_LEDGER_V1
