@@ -1,1 +1,1 @@
-# contribution-ledger
+Contribution Ledger is the Tier-0 standalone economic / incentive accounting instrument for the ecosystem. It ingests verified receipts, computes deterministic contribution credit, prevents double-counting and credit drift, and emits canonical append-only ledger records with verifiable proof artifacts.
