@@ -76,14 +76,14 @@ $btnClear.Height = 36
 $lblOut = New-Object System.Windows.Forms.Label
 $lblOut.Text = "Output"
 $lblOut.Left = 20
-$lblOut.Top = 195
+$lblOut.Top = 230
 $lblOut.Width = 100
 
 $txtOut = New-Object System.Windows.Forms.TextBox
 $txtOut.Left = 20
-$txtOut.Top = 217
+$txtOut.Top = 252
 $txtOut.Width = 700
-$txtOut.Height = 230
+$txtOut.Height = 195
 $txtOut.Multiline = $true
 $txtOut.ScrollBars = "Vertical"
 $txtOut.ReadOnly = $true
@@ -152,6 +152,65 @@ $btnRun.Add_Click({
   }
 })
 
+
+$btnGen.Add_Click({
+  try{
+    $resolvedWs = Resolve-WorkspacePath $RepoRoot $txtWs.Text
+    if([string]::IsNullOrWhiteSpace($resolvedWs)){ throw "WORKSPACE_PATH_EMPTY" }
+
+    $inputsDir = Join-Path $resolvedWs "inputs"
+    $receiptsPath = Join-Path $inputsDir "receipts.ndjson"
+    $adapter = Join-Path $RepoRoot "scripts\adapters\adapter_synthetic_v1.ps1"
+
+    if(-not (Test-Path -LiteralPath $adapter -PathType Leaf)){
+      throw ("ADAPTER_MISSING: " + $adapter)
+    }
+
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = (Get-Command powershell.exe -ErrorAction Stop).Source
+    $psi.Arguments = ('-NoProfile -ExecutionPolicy Bypass -File "{0}" -OutPath "{1}"' -f $adapter,$receiptsPath)
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+
+    $proc = New-Object System.Diagnostics.Process
+    $proc.StartInfo = $psi
+    [void]$proc.Start()
+
+    $stdout = $proc.StandardOutput.ReadToEnd()
+    $stderr = $proc.StandardError.ReadToEnd()
+    $proc.WaitForExit()
+
+    $parts = New-Object System.Collections.Generic.List[string]
+    [void]$parts.Add("=== GENERATE SYNTHETIC RECEIPTS ===")
+    [void]$parts.Add("exit_code=" + [string]$proc.ExitCode)
+    [void]$parts.Add("")
+    [void]$parts.Add("workspace=" + $resolvedWs)
+    [void]$parts.Add("receipts=" + $receiptsPath)
+    [void]$parts.Add("")
+    [void]$parts.Add("=== STDOUT ===")
+    if($stdout.Length -gt 0){
+      [void]$parts.Add($stdout.TrimEnd("`r","`n"))
+    }
+    [void]$parts.Add("")
+    [void]$parts.Add("=== STDERR ===")
+    if($stderr.Length -gt 0){
+      [void]$parts.Add($stderr.TrimEnd("`r","`n"))
+    }
+
+    Set-Output ((@($parts.ToArray()) -join "`r`n"))
+
+    if($proc.ExitCode -eq 0){
+      if(Test-Path -LiteralPath $resolvedWs -PathType Container){
+        $txtWs.Text = $resolvedWs
+      }
+    }
+  }
+  catch{
+    Set-Output ("GENERATE_SYNTHETIC_EXCEPTION`r`n" + $_.Exception.Message)
+  }
+})
 $btnOpenWs.Add_Click({
   try{
     $resolvedWs = Resolve-WorkspacePath $RepoRoot $txtWs.Text
@@ -191,6 +250,7 @@ $form.Controls.Add($lblWs)
 $form.Controls.Add($txtWs)
 $form.Controls.Add($btnRun)
 $form.Controls.Add($btnOpenWs)
+$form.Controls.Add($btnGen)
 $form.Controls.Add($btnOpenLedger)
 $form.Controls.Add($btnClear)
 $form.Controls.Add($lblOut)
