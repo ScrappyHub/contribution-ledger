@@ -21,7 +21,7 @@ $output.Left = 20
 
 $btn.Add_Click({
     $proc = Start-Process powershell `
-        -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File .\scripts\START_contributing_phase_v1.ps1 -RepoRoot ." `
+        -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File .\scripts\START_contributing_phase_v2.ps1 -RepoRoot ." `
         -NoNewWindow -PassThru -Wait -RedirectStandardOutput "out.txt"
 
     $output.Text = Get-Content "out.txt" -Raw
