@@ -179,6 +179,18 @@ $btnGen.Add_Click({
     $inputsDir = Join-Path $resolvedWs "inputs"
     $receiptsPath = Join-Path $inputsDir "receipts.ndjson"
 
+    $derived = @(
+      (Join-Path $resolvedWs "ledger.ndjson")
+      (Join-Path $resolvedWs "build_result.json")
+      (Join-Path $resolvedWs "verify_result.json")
+    )
+
+    foreach($p in @($derived)){
+      if(Test-Path -LiteralPath $p -PathType Leaf){
+        Remove-Item -LiteralPath $p -Force
+      }
+    }
+
     $psi = New-Object System.Diagnostics.ProcessStartInfo
     $psi.FileName = (Get-Command powershell.exe -ErrorAction Stop).Source
     $psi.Arguments = ('-NoProfile -ExecutionPolicy Bypass -File "{0}" -OutPath "{1}"' -f $AdapterScript,$receiptsPath)
@@ -201,6 +213,7 @@ $btnGen.Add_Click({
     [void]$parts.Add("")
     [void]$parts.Add("workspace=" + $resolvedWs)
     [void]$parts.Add("receipts=" + $receiptsPath)
+    [void]$parts.Add("reset=ledger.ndjson|build_result.json|verify_result.json")
     [void]$parts.Add("")
     [void]$parts.Add("=== STDOUT ===")
     if($stdout.Length -gt 0){ [void]$parts.Add($stdout.TrimEnd("`r","`n")) }
