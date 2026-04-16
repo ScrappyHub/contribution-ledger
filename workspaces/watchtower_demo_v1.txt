@@ -1,0 +1,2 @@
+inputs\receipts.ndjson
+inputs\ruleset.json

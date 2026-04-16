@@ -1,0 +1,13 @@
+=== CONTRIBUTION PHASE START ===
+RepoRoot: C:\dev\contribution-ledger
+TvRoot:   C:\dev\contribution-ledger\test_vectors\minimal_valid
+BUILD_OK: added=0 tv=C:\dev\contribution-ledger\test_vectors\minimal_valid
+VERIFY_OK: C:\dev\contribution-ledger\test_vectors\minimal_valid
+
+=== CONTRIBUTION RESULT ===
+OK: True
+STATUS: VALID CONTRIBUTION
+RULESET_HASH: 359738c5d956b94e58e10e92cff275454d12c47b892b31ab818cc2605f159bd8
+LEDGER: C:\dev\contribution-ledger\test_vectors\minimal_valid\ledger.ndjson
+
+CONTRIBUTION_PHASE_DONE

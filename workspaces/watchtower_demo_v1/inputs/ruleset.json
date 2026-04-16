@@ -1,0 +1,1 @@
+{"schema":"ruleset.v1","ruleset_id":"watchtower_demo_v1","rules":[{"event_type":"watchtower.verify","weight":5},{"event_type":"device.uptime","weight":1}]}

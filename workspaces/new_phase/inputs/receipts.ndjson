@@ -1,0 +1,2 @@
+{"schema":"contrib.receipt.v1","receipt_hash":"synthetic_r1","event_type":"watchtower.verify","units":1}
+{"schema":"contrib.receipt.v1","receipt_hash":"synthetic_r2","event_type":"device.uptime","units":60}

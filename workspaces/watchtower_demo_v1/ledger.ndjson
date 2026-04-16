@@ -1,0 +1,2 @@
+{"credit":5,"event_ref":"4a877c3cd76165a97e97d34b45846535eeb8d1047553d9f2cbc948e015ee7fc7","event_type":"watchtower.verify","receipt_hash":"wt_r1","ruleset_hash":"7f46c5aed950799b398da1aa9bb3ca11afb02cbe38d4483584d161f7c82acc2e","schema":"contrib.ledger.line.v1","units":1,"weight":5}
+{"credit":1440,"event_ref":"79e4fb77ebcfff5b2d7e6fd648b3d894d6876caff162269d9e487979972f90e6","event_type":"device.uptime","receipt_hash":"wt_r2","ruleset_hash":"7f46c5aed950799b398da1aa9bb3ca11afb02cbe38d4483584d161f7c82acc2e","schema":"contrib.ledger.line.v1","units":1440,"weight":1}

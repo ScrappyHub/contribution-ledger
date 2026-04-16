@@ -1,297 +1,118 @@
-<<<<<<< HEAD
 # Contribution Ledger
 
-Contribution Ledger is a deterministic accounting instrument that converts verified receipts into canonical contribution ledger entries and contribution credit.
+Contribution Ledger is a deterministic accounting engine that converts verifiable receipts into a reproducible, auditable ledger.
 
-It provides the accounting backbone for incentive and contribution systems by ensuring that contribution claims are derived only from verifiable receipts and deterministic rules.
+It is designed to:
 
-The system prevents double counting, ruleset drift, and unverifiable contribution claims by enforcing strict verification of ledger entries.
+* ingest canonical receipts
+* apply a fixed ruleset
+* build ledger entries deterministically
+* verify correctness with strict failure modes
 
----
+This is not a financial system. It does not issue tokens, process payments, or manage balances.
 
-## What This Project Does
-
-Contribution Ledger performs deterministic accounting over verified events.
-
-Given:
-
-- verified receipt inputs
-- a deterministic ruleset
-
-the system produces:
-
-- canonical ledger entries
-- deterministic contribution credit
-- verifiable accounting state
-
-The ledger is append-only and designed to be independently verifiable.
+It is a proof-first accounting layer.
 
 ---
 
-## What This Project Does Not Do
+## What it does
 
-Contribution Ledger does not:
-
-- issue tokens
-- price assets
-- process payments
-- act as a policy engine
-- manage identity
-- act as a verification authority
-
-Those responsibilities belong to other systems.
-
-Contribution Ledger only performs deterministic contribution accounting over already verified events.
+* Converts receipts → ledger lines
+* Ensures deterministic builds
+* Verifies ledger correctness
+* Fails on inconsistencies (no silent repair)
+* Produces reproducible outputs across machines
 
 ---
 
-## Current Status
+## Quick Start
 
-The current standalone accounting surface is fully operational.
+### Run selftest (engine validation)
 
-The repository includes:
+```
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\scripts\FULL_GREEN_RUNNER_CONTRIBUTION_LEDGER_v1.ps1 -RepoRoot .
+```
 
-- deterministic build pipeline
-- deterministic verification pipeline
-- positive and negative proof vectors
-- append-only accounting receipts
-- a reproducible freeze bundle
+Expected:
 
-Freeze proof bundle:
-
-
-proofs/freeze/contribution_ledger_tier0_green_20260308
-
-
----
-
-## Repository Layout
-
-
-docs/
-proofs/
-scripts/
-test_vectors/
-
-
-Key scripts:
-
-
-scripts/_lib_contribution_ledger_v1.ps1
-scripts/build_contribution_ledger_v1.ps1
-scripts/verify_contribution_ledger_v1.ps1
-scripts/_SELFTEST_contribution_ledger_v1.ps1
-scripts/FULL_GREEN_RUNNER_CONTRIBUTION_LEDGER_v1.ps1
-
-
----
-
-## Running the Project
-
-Run the full validation surface:
-
-
-powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\scripts\FULL_GREEN_RUNNER_CONTRIBUTION_LEDGER_v1.ps1
--RepoRoot .
-
-
-Expected success token:
-
-
+```
 FULL_GREEN_OK: CONTRIBUTION_LEDGER_V1
-
-
----
-
-## Freeze Evidence
-
-The freeze bundle contains:
-
-- execution transcript
-- deterministic file hashes
-- freeze receipt
-
-Location:
-
-
-proofs/freeze/contribution_ledger_tier0_green_20260308
-
+```
 
 ---
 
-## Deterministic Environment
+### Create and run a contribution workspace
 
-The project is designed for deterministic execution using:
+```
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\START_contributing_phase_v2.ps1 -RepoRoot . -TvRoot .\workspaces\demo_phase
+```
 
-- Windows PowerShell 5.1
-- StrictMode enabled
-- UTF-8 without BOM
-- LF line endings
-- write → parse-gate → execute discipline
+This will:
+
+* bootstrap the workspace
+* ingest receipts
+* build ledger
+* verify correctness
 
 ---
 
-## Use Cases
+### Run again (idempotent)
 
-Contribution Ledger can be used to account for:
+```
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\START_contributing_phase_v2.ps1 -RepoRoot . -TvRoot .\workspaces\demo_phase
+```
 
-- infrastructure uptime
-- verification work
-- artifact validation
-- telemetry verification
-- other provable contribution surfaces backed by receipts
+Expected:
 
-The ledger provides the deterministic accounting layer required for incentive or reputation systems built on top of verified events.
+* no new additions
+* still valid
+
+---
+
+## Outputs
+
+Workspace example:
+
+```
+workspaces/demo_phase/
+  inputs/
+    receipts.ndjson
+  ledger.ndjson
+  build_result.json
+  verify_result.json
+```
+
+---
+
+## Determinism guarantees
+
+* Same inputs → same outputs
+* No mutation during verify
+* Strict failure on mismatch
+* All outputs reproducible
+
+---
+
+## What this is not
+
+* Not a payment system
+* Not a token system
+* Not a wallet
+* Not a database of record
+
+It is a deterministic computation layer.
+
+---
+
+## Status
+
+* CLI engine: stable
+* Selftest + vectors: complete
+* Freeze artifact: complete
+* UI: local workbench (non-canonical)
 
 ---
 
 ## License
 
 TBD
-=======
-# Contribution Ledger
-
-Contribution Ledger is the Tier-0 standalone economic / incentive accounting instrument of the ecosystem.
-
-It converts verified receipts into canonical contribution ledger entries, deterministic credit totals, and provable incentive weight.
-
-Contribution Ledger does not mint currency, price assets, or settle payments. Its role is narrower and more fundamental: it records *who contributed what* based on verifiable receipts, using deterministic rules and append-only ledger outputs.
-
-This is the current standalone nucleus of the Economic / Incentive Layer.
-
----
-
-## What This Project Is
-
-Contribution Ledger is a deterministic accounting instrument that ingests verified receipt events and produces canonical contribution ledger lines.
-
-Its job is to answer:
-
-- who contributed
-- what they contributed
-- how much deterministic credit that contribution is worth
-- whether the resulting accounting surface is valid and independently verifiable
-
-The instrument is designed to prevent:
-
-- double-counting
-- ruleset drift
-- silent credit inflation
-- non-verifiable contribution claims
-
-It is a proof-driven economic layer, not a speculative token system.
-
----
-
-## What This Project Is Not
-
-Contribution Ledger is not:
-
-- a payment processor
-- a cryptocurrency
-- a market pricing engine
-- a token mint
-- an identity authority
-- a transport law
-- a policy engine
-
-Those responsibilities belong elsewhere in the ecosystem.
-
-Contribution Ledger only performs deterministic contribution accounting over already-proven events.
-
----
-
-## Current Status
-
-**Tier-0 standalone surface: FULL_GREEN**
-
-Proven current surface includes:
-
-- deterministic build
-- deterministic verify
-- positive vector pass
-- negative vector pass
-- append-only receipt emission
-- frozen proof artifacts
-- full green runner
-
-Freeze proof bundle:
-
-`proofs/freeze/contribution_ledger_tier0_green_20260308/`
-
-Key outputs:
-
-- `full_green_transcript.txt`
-- `sha256sums.txt`
-- `freeze_receipt.json`
-
-Canonical success token:
-
-`FULL_GREEN_OK: CONTRIBUTION_LEDGER_V1`
-
-Freeze success token:
-
-`CONTRIBUTION_LEDGER_TIER0_FREEZE_OK`
-
----
-
-## What the Instrument Performs Today
-
-Contribution Ledger currently performs:
-
-1. Deterministic contribution accounting  
-   Converts receipts + rulesets into canonical ledger lines.
-
-2. Contribution verification  
-   Validates that ledger outputs match deterministic expectations.
-
-3. Credit derivation  
-   Computes contribution credit from ruleset weights and receipt inputs.
-
-4. Negative-vector enforcement  
-   Proves deterministic failure on malformed or tampered accounting surfaces.
-
-5. Append-only economic receipts  
-   Emits auditable receipt artifacts for selftest and freeze operations.
-
----
-
-## Current Tier-0 Proof Surface
-
-Current vectors cover:
-
-- minimal valid contribution ledger flow
-- duplicate event reference failure
-- ruleset hash mismatch failure
-- credit mismatch failure
-
-Deterministic failure tokens currently proven:
-
-- `DUP_EVENT_REF`
-- `RULESET_HASH_MISMATCH`
-- `CREDIT_MISMATCH`
-
-Additional failure tokens may appear in some negative cases depending on how a tampered surface breaks multiple invariants at once; Tier-0 currently requires the expected primary token to be present.
-
----
-
-## Repository Layout
-
-```text
-docs/
-proofs/
-  freeze/
-  receipts/
-scripts/
-  _lib_contribution_ledger_v1.ps1
-  build_contribution_ledger_v1.ps1
-  verify_contribution_ledger_v1.ps1
-  _SELFTEST_contribution_ledger_v1.ps1
-  FULL_GREEN_RUNNER_CONTRIBUTION_LEDGER_v1.ps1
-  _scratch/
-test_vectors/
-  minimal_valid/
-  neg_dup_event_ref/
-  neg_ruleset_hash_mismatch/
-  neg_credit_mismatch/
->>>>>>> 6125a50f085da302e40b9ce6c7260064d28a8406
