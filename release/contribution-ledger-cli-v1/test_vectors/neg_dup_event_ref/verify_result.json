@@ -1,0 +1,1 @@
+{"failures":["DUP_EVENT_REF"],"ledger_hash":"80a7231987313a56eeda246dacb7835afb9ec67e067e8d57dea2a08cfd6d64f3","ok":false,"ruleset_hash":"359738c5d956b94e58e10e92cff275454d12c47b892b31ab818cc2605f159bd8","schema":"contrib.verify_result.v1"}

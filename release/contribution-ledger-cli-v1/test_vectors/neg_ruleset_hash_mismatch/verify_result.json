@@ -1,0 +1,1 @@
+{"failures":["RULESET_HASH_MISMATCH","LEDGER_EVENT_REF_NOT_IN_RECEIPTS","RULESET_HASH_MISMATCH","LEDGER_EVENT_REF_NOT_IN_RECEIPTS"],"ledger_hash":"4d0b761f0d9387b59fc4791f329b20fc5d5f18b8bba3905f1cb931a9abd04ff7","ok":false,"ruleset_hash":"40bd9d7d69fbdde1c336d0aa468743d70a71f921e65c4175fb8deef749fb1300","schema":"contrib.verify_result.v1"}
