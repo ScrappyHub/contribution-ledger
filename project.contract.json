@@ -1,0 +1,21 @@
+{
+  "project_id": "contribution-ledger",
+  "canonical_name": "contribution-ledger",
+  "ecosystem": {
+    "registry_schema": "constellation.service.registry.v1",
+    "service_id": "contribution-ledger",
+    "ecosystem_family": "unassigned",
+    "ecosystem_families": [
+      "unassigned"
+    ],
+    "layer": "economics.contribution-accounting",
+    "role": "Standalone deterministic contribution-accounting instrument: converts receipt-backed contribution events plus an explicit valuation ruleset into canonical contribution credits and an independently verifiable ledger.",
+    "standalone_first": true,
+    "upstream_services": [],
+    "downstream_users": [],
+    "contract_families": [],
+    "service_map_path": "C:\\dev\\Constellation\\ecosystem\\SERVICE_MAP.md",
+    "registry_path": "C:\\dev\\Constellation\\registry\\services.json",
+    "integration_doc_path": "docs/canonical/ECOSYSTEM_INTEGRATION.md"
+  }
+}
